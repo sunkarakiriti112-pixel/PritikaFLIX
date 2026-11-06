@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PritikaFLIX</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141414;--red:#E50914;--fg:#f2f2f2;--mut:#a8a8a8;--card:#1f1f1f}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.5 Inter,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,.logo,.num,.big{font-family:'Bebas Neue',Impact,sans-serif;font-weight:400;letter-spacing:.02em}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#profiles{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:1rem}
+#profiles h1{font-size:clamp(2.2rem,7vw,4rem)}
+.plist{display:flex;gap:clamp(1rem,4vw,2.5rem);flex-wrap:wrap;justify-content:center}
+.prof{width:clamp(110px,28vw,160px);text-align:center;color:var(--mut)}
+.prof .av{aspect-ratio:1;border-radius:6px;display:grid;place-items:center;font-size:3.5rem;margin-bottom:.6rem;border:3px solid transparent;transition:border-color .2s}
+.prof:hover .av,.prof:focus-visible .av{border-color:#fff}.prof:hover{color:#fff}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:1.4rem;padding:.7rem 4%;background:linear-gradient(#000c,#0000);transition:background .3s}
+nav.solid{background:var(--bg)}
+.logo{color:var(--red);font-size:1.9rem;cursor:pointer;line-height:1}
+nav a{color:#ddd;text-decoration:none;font-size:.9rem}nav a:hover{color:#fff}
+.sp{flex:1}
+#q{background:#000a;border:1px solid #666;color:#fff;border-radius:4px;padding:.35rem .7rem;width:min(200px,34vw);font:inherit;font-size:.85rem}
+.ibtn{font-size:1.3rem;padding:.2rem .4rem}
+#hero{height:min(85vh,720px);min-height:480px;background:linear-gradient(135deg,#7a0a14,#1b0a2e) center/cover;display:flex;align-items:flex-end;position:relative}
+#hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 2%,#0000 45%),linear-gradient(90deg,#000a,#0000 65%)}
+.hc{position:relative;z-index:2;padding:0 4% 7rem;max-width:640px}
+.hc h1{font-size:clamp(3.2rem,11vw,6.5rem);line-height:.95}
+.meta{margin:.8rem 0;color:var(--mut);font-size:.95rem}.meta b{color:#46d369}
+.hc p{margin-bottom:1.2rem}
+.btn{padding:.6rem 1.5rem;border-radius:4px;font-weight:600;margin-right:.6rem;transition:opacity .2s}
+.btn:hover{opacity:.8}.b1{background:#fff;color:#000}.b2{background:#6d6d6eb3}
+main{margin-top:-5rem;position:relative;z-index:3;padding-bottom:4rem}
+.row{padding:0 4%;margin-bottom:2.2rem}
+.row h2{font-size:1.6rem;margin-bottom:.5rem}
+.wrap{position:relative}
+.strip{display:flex;gap:.5rem;overflow-x:auto;scroll-snap-type:x proximity;padding:.8rem 0 1.4rem;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.arr{position:absolute;top:.8rem;bottom:1.4rem;width:3rem;z-index:5;background:#000a;font-size:2rem;opacity:0;transition:opacity .2s}
+.wrap:hover .arr{opacity:1}.arr.l{left:-4%}.arr.r{right:-4%}
+.card{position:relative;flex:0 0 clamp(190px,24vw,290px);aspect-ratio:16/9;border-radius:4px;overflow:hidden;background:var(--card);cursor:pointer;scroll-snap-align:start;transition:transform .25s,box-shadow .25s}
+.card:hover,.card:focus-visible{transform:scale(1.12);z-index:6;box-shadow:0 8px 24px #000c}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:1.4rem .6rem .5rem;background:linear-gradient(0deg,#000e,#0000);font-size:.8rem}
+.cap b{display:block;font-size:.9rem}.cap small{color:#ccc}
+.hb{position:absolute;top:.3rem;right:.3rem;font-size:1.1rem;background:#0008;border-radius:50%;width:2rem;height:2rem;z-index:2}
+.prog{position:absolute;left:0;bottom:0;height:4px;background:var(--red)}
+.topc{display:flex;flex:0 0 auto;align-items:center}
+.num{font-size:7rem;line-height:1;color:#141414;-webkit-text-stroke:3px #777;margin-right:-.9rem;position:relative;z-index:1}
+.topc .card{flex-basis:clamp(150px,19vw,220px);aspect-ratio:2/3}
+.feat{margin:0 4% 2.2rem;border-radius:8px;padding:1.6rem;background:linear-gradient(120deg,#5a0610,#1b0a2e);display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid #ffffff22}
+.feat h2{font-size:2rem}.feat p{color:#ddd;max-width:520px}
+.ov{position:fixed;inset:0;z-index:90;background:#000d;display:none;align-items:center;justify-content:center;padding:1rem}
+.ov.on{display:flex}
+.modal{background:#181818;border-radius:8px;width:min(760px,100%);max-height:92vh;overflow:auto;position:relative}
+.modal video.media,.modal img.media{object-fit:contain}
+.modal .media{aspect-ratio:16/9;width:100%;background:#000;display:block;object-fit:cover}
+.mb{padding:1.2rem 1.5rem 1.6rem}.mb h2{font-size:2rem;line-height:1.1}.mb .meta{margin:.3rem 0 .8rem}
+.x{position:absolute;top:.6rem;right:.6rem;z-index:3;background:#000b;border-radius:50%;width:2.2rem;height:2.2rem;font-size:1.2rem}
+#ap{background:radial-gradient(circle at 50% 30%,#3a0610,#000 70%);flex-direction:column;text-align:center;gap:1.5rem;z-index:95}
+#ap h1{font-size:clamp(2rem,6vw,3.5rem);color:var(--red)}
+#apt{max-width:620px;font-size:clamp(1.05rem,2.6vw,1.4rem);line-height:1.8;min-height:11rem}
+#fg{display:none;background:var(--red);padding:.8rem 2rem;border-radius:4px;font-weight:600;font-size:1.1rem}
+#renew{display:none;font-size:clamp(2rem,6vw,3.2rem)}
+#conf{position:fixed;inset:0;z-index:99;pointer-events:none}
+#toast{position:fixed;left:50%;bottom:2rem;transform:translate(-50%,2rem);background:#fff;color:#000;padding:.7rem 1.4rem;border-radius:6px;font-weight:600;opacity:0;transition:.4s;z-index:120;pointer-events:none;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.hide{display:none!important}
+@media(max-width:640px){nav a{display:none}nav a.k{display:inline}.arr{display:none}.num{font-size:5rem}.hc{padding-bottom:5rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div id="profiles" role="dialog" aria-label="Who's watching?">
+  <h1>Who’s watching?</h1>
+  <div class="plist" id="plist"></div>
+</div>
+
+<nav id="nav">
+  <div class="logo" id="logo" tabindex="0" role="button" aria-label="Logo"></div>
+  <a href="#home">Home</a><a href="#travels">Travels</a><a href="#everyday">Moments</a><a href="#firsts">Us</a><a href="#mylist" class="k">My List</a>
+  <span class="sp"></span>
+  <input id="q" type="search" placeholder="Search" aria-label="Search">
+  <button class="ibtn" id="mus" aria-label="Toggle music">🔇</button>
+</nav>
+
+<header id="hero"><div class="hc">
+  <h1 id="ht"></h1>
+  <div class="meta"><b>100% Match</b> &nbsp; 2026 &nbsp; Season 1 &nbsp; HD</div>
+  <p id="htag"></p>
+  <button class="btn b1" id="play">▶ Play</button><button class="btn b2" id="more">ⓘ More Info</button>
+</div></header>
+
+<main id="home"></main>
+
+<div class="ov" id="ov" aria-modal="true" role="dialog">
+  <div class="modal">
+    <button class="x" id="xm" aria-label="Close">✕</button>
+    <div id="mm"></div>
+    <div class="mb"><h2 id="mt"></h2><div class="meta" id="md"></div><p id="mc"></p>
+      <p style="margin-top:1rem"><button class="btn b2" id="mh"></button></p></div>
+  </div>
+</div>
+
+<div class="ov" id="ap" aria-modal="true" role="dialog" aria-label="The Apology">
+  <button class="x" id="xa" aria-label="Close">✕</button>
+  <h1>The Apology</h1>
+  <p id="apt"></p>
+  <button id="fg">Forgive me? ❤️</button>
+  <div id="renew" class="big">Season 2 renewed. ❤️</div>
+</div>
+<canvas id="conf"></canvas>
+<div id="toast"></div>
+<audio id="aud" loop></audio><audio id="aud2" loop></audio>
+
+<script>
+/* =====================================================================
+   EDIT THIS BLOCK ONLY — everything you see on the site comes from here.
+   Images: put files in /media/... and change the "img" path.
+   Videos (optional): add  video:"media/videos/clip.mp4"  to any card.
+   Missing images automatically show a coloured placeholder with an emoji.
+   ===================================================================== */
+const CONFIG = {
+  name: "Pritika",
+  profiles: [
+    { name: "Kannamma", emoji: "❤️", toast: "Welcome back, Kannamma ❤️" },
+    { name: "Ammu",     emoji: "🌸", toast: "Hey Ammu, this one’s all for you 💫" }
+  ],
+  heroTitle: "Our Story",
+  tagline: "Two people, countless memories, and a future still being written.",
+  heroImg: "media/hero.jpg",              // <-- big photo of the two of you
+  music: "media/music.mp3",               // <-- background music (optional)
+  apologyMusic: "media/apology.mp3",      // <-- soft music for The Apology (optional)
+  secretNote: "You found the secret. I love you more than any title on any screen. 💌",
+  apology: "My Love, I know things are hard and everything seems tiring and difficult right now, but I know the future and it will be great 🧿😚. The future might hold anything, but I will be holding your hand through everything till the last breath. I love you, Kannamma 💕💕"
+};
+
+// Each row: id, title, emoji (used by placeholders), items [{title, date, caption, img, video?}]
+const ROWS = [
+  { id:"travels", title:"Travels", emoji:"✈️", items:[
+    { title:"Travel memory 1", date:"Add date", caption:"Add your caption", img:"media/videos/v1.jpg", video:"media/videos/v1.mp4" },
+    { title:"Travel memory 2", date:"Add date", caption:"Add your caption", img:"media/videos/v2.jpg", video:"media/videos/v2.mp4" },
+    { title:"Travel memory 3", date:"Add date", caption:"Add your caption", img:"media/videos/v3.jpg", video:"media/videos/v3.mp4" },
+    { title:"Travel memory 4", date:"Add date", caption:"Add your caption", img:"media/videos/v4.jpg", video:"media/videos/v4.mp4" },
+    { title:"Travel memory 5", date:"Add date", caption:"Add your caption", img:"media/videos/v5.jpg", video:"media/videos/v5.mp4" }
+  ]},
+  { id:"everyday", title:"Everyday Life", emoji:"🍜", items:[
+    { title:"Everyday moment 1", date:"Add date", caption:"Add your caption", img:"media/videos/v6.jpg", video:"media/videos/v6.mp4" },
+    { title:"Everyday moment 2", date:"Add date", caption:"Add your caption", img:"media/videos/v7.jpg", video:"media/videos/v7.mp4" },
+    { title:"Everyday moment 3", date:"Add date", caption:"Add your caption", img:"media/videos/v8.jpg", video:"media/videos/v8.mp4" },
+    { title:"Everyday moment 4", date:"Add date", caption:"Add your caption", img:"media/videos/v9.jpg", video:"media/videos/v9.mp4" },
+    { title:"Everyday moment 5", date:"Add date", caption:"Add your caption", img:"media/videos/v10.jpg", video:"media/videos/v10.mp4" },
+    { title:"Everyday moment 6", date:"Add date", caption:"Add your caption", img:"media/videos/v11.jpg", video:"media/videos/v11.mp4" },
+    { title:"Everyday moment 7", date:"Add date", caption:"Add your caption", img:"media/videos/v12.jpg", video:"media/videos/v12.mp4" },
+    { title:"Everyday moment 8", date:"Add date", caption:"Add your caption", img:"media/videos/v13.jpg", video:"media/videos/v13.mp4" }
+  ]},
+  { id:"firsts", title:"Our Firsts", emoji:"🌟", items:[
+    { title:"Our first 1", date:"Add date", caption:"Add your caption", img:"media/videos/v14.jpg", video:"media/videos/v14.mp4" },
+    { title:"Our first 2", date:"Add date", caption:"Add your caption", img:"media/videos/v15.jpg", video:"media/videos/v15.mp4" },
+    { title:"Our first 3", date:"Add date", caption:"Add your caption", img:"media/videos/v16.jpg", video:"media/videos/v16.mp4" },
+    { title:"Our first 4", date:"Add date", caption:"Add your caption", img:"media/videos/v17.jpg", video:"media/videos/v17.mp4" }
+  ]},
+  { id:"love", title:"Things I Love About You", emoji:"💖", items:[
+    { title:"Reason 1", date:"Add date", caption:"Add your caption", img:"media/videos/v18.jpg", video:"media/videos/v18.mp4" },
+    { title:"Reason 2", date:"Add date", caption:"Add your caption", img:"media/videos/v19.jpg", video:"media/videos/v19.mp4" },
+    { title:"Reason 3", date:"Add date", caption:"Add your caption", img:"media/videos/v20.jpg", video:"media/videos/v20.mp4" },
+    { title:"Reason 4", date:"Add date", caption:"Add your caption", img:"media/videos/v21.jpg", video:"media/videos/v21.mp4" },
+    { title:"Reason 5", date:"Add date", caption:"Add your caption", img:"media/videos/v22.jpg", video:"media/videos/v22.mp4" },
+    { title:"Reason 6", date:"Add date", caption:"Add your caption", img:"media/videos/v23.jpg", video:"media/videos/v23.mp4" }
+  ]},
+  { id:"jokes", title:"Inside Jokes", emoji:"😂", items:[
+    { title:"Inside joke 1", date:"Add date", caption:"Add your caption", img:"media/videos/v24.jpg", video:"media/videos/v24.mp4" },
+    { title:"Inside joke 2", date:"Add date", caption:"Add your caption", img:"media/videos/v25.jpg", video:"media/videos/v25.mp4" },
+    { title:"Inside joke 3", date:"Add date", caption:"Add your caption", img:"media/videos/v26.jpg", video:"media/videos/v26.mp4" },
+    { title:"Inside joke 4", date:"Add date", caption:"Add your caption", img:"media/videos/v27.jpg", video:"media/videos/v27.mp4" },
+    { title:"Inside joke 5", date:"Add date", caption:"Add your caption", img:"media/videos/v28.jpg", video:"media/videos/v28.mp4" }
+  ]},
+  { id:"sorry", title:"Because I’m Sorry", emoji:"🕊️", items:[
+    { title:"The Apology", date:"Today", caption:"A message from me to you.", apology:true },
+    { title:"Sorry moment 1", date:"Add date", caption:"Add your caption", img:"media/videos/v29.jpg", video:"media/videos/v29.mp4" },
+    { title:"Sorry moment 2", date:"Add date", caption:"Add your caption", img:"media/videos/v30.jpg", video:"media/videos/v30.mp4" }
+  ]},
+  { id:"soon", title:"Coming Soon", emoji:"🎬", items:[
+    { title:"The Trip We Keep Talking About", date:"Soon", caption:"Tickets pending, excitement not.", img:"media/soon/trip.jpg" },
+    { title:"Our Own Place", date:"Someday", caption:"Your chai, my playlist.", img:"media/soon/home.jpg" }
+  ]}
+];
+
+// "Top 10 Reasons I Love You" (add up to 10)
+const TOP10 = [
+  { title:"You make me laugh", date:"Reason", caption:"Even when I’m trying to stay serious.", img:"media/top/1.jpg" },
+  { title:"You’re home to me", date:"Reason", caption:"Anywhere, as long as it’s you.", img:"media/top/2.jpg" },
+  { title:"You believe in me", date:"Reason", caption:"Louder than I do.", img:"media/top/3.jpg" },
+  { title:"Your smile", date:"Reason", caption:"Enough said.", img:"media/top/4.jpg" },
+  { title:"You’re you", date:"Reason", caption:"Nobody else comes close.", img:"media/top/5.jpg" }
+];
+
+// "Continue Watching": pick card titles from above and a progress %
+const CONTINUE = [ ["Travel memory 1",70], ["Everyday moment 1",40], ["Our first 1",15] ];
+/* ============================ END OF EDIT BLOCK ===================== */
+
+const $ = s => document.querySelector(s);
+const ALL = {};
+let LIST = [];
+try { LIST = JSON.parse(localStorage.getItem("myList") || "[]"); } catch (e) {}
+const saveList = () => { try { localStorage.setItem("myList", JSON.stringify(LIST)); } catch (e) {} };
+
+function ph(t, e) {
+  const h = [...t].reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
+  return "data:image/svg+xml," + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h},55%,35%)"/><stop offset="1" stop-color="hsl(${(h + 50) % 360},65%,14%)"/></linearGradient></defs><rect width="480" height="270" fill="url(#g)"/><text x="240" y="155" font-size="68" text-anchor="middle">${e}</text></svg>`);
+}
+function el(tag, cls, html) { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function card(it, emoji, extra) {
+  const c = el("div", "card"); c.tabIndex = 0; c.dataset.id = it.uid; c.dataset.s = (it.title + " " + it.caption).toLowerCase();
+  const im = new Image(); im.alt = it.title; im.loading = "lazy";
+  im.onerror = () => {
+    im.onerror = null;
+    if (it.video) { // no photo: use the first frame of the video as the thumbnail
+      const v = document.createElement("video"); v.src = it.video + "#t=0.5"; v.muted = true; v.preload = "metadata"; v.playsInline = true;
+      v.style.cssText = "width:100%;height:100%;object-fit:cover;display:block"; im.replaceWith(v);
+    } else im.src = ph(it.title, emoji);
+  };
+  if (it.img) im.src = it.img; else im.onerror();
+  c.append(im);
+  c.append(el("div", "cap", `<b>${esc(it.label)}</b><small>${esc(it.date)} · ${esc(it.title === it.label ? it.caption : it.caption)}</small>`));
+  const hb = el("button", "hb", LIST.includes(it.uid) ? "❤️" : "🤍"); hb.setAttribute("aria-label", "Add to My List"); hb.dataset.heart = it.uid;
+  c.append(hb);
+  if (extra) c.append(extra);
+  return c;
+}
+
+function rowEl(id, title, cards, wrapCls) {
+  const s = el("section", "row"); s.id = id;
+  s.append(el("h2", null, esc(title)));
+  const w = el("div", "wrap");
+  const l = el("button", "arr l", "‹"), r = el("button", "arr r", "›"); l.setAttribute("aria-label", "Scroll left"); r.setAttribute("aria-label", "Scroll right");
+  const st = el("div", "strip");
+  cards.forEach(c => st.append(c));
+  l.onclick = () => st.scrollBy({ left: -st.clientWidth * .8, behavior: "smooth" });
+  r.onclick = () => st.scrollBy({ left: st.clientWidth * .8, behavior: "smooth" });
+  w.append(l, st, r); s.append(w); return s;
+}
+
+function build() {
+  const m = $("#main") || $("main"); m.innerHTML = "";
+  let uid = 0;
+  ROWS.forEach((row, ri) => row.items.forEach((it, i) => {
+    it.uid = "r" + (uid++); it.label = `S${ri + 1}:E${i + 1} – ${it.title}`; it.emoji = row.emoji; ALL[it.uid] = it;
+  }));
+  TOP10.forEach((it, i) => { it.uid = "t" + i; it.label = it.title; it.emoji = "💘"; ALL[it.uid] = it; });
+
+  // Continue Watching
+  const cw = CONTINUE.map(([t, p]) => {
+    const it = Object.values(ALL).find(x => x.title === t); if (!it) return null;
+    const bar = el("div", "prog"); bar.style.width = p + "%"; return card(it, it.emoji, bar);
+  }).filter(Boolean);
+  if (cw.length) m.append(rowEl("continue", "Continue Watching", cw));
+
+  // Featured apology card
+  const f = el("div", "feat");
+  f.id = "apology";
+  f.innerHTML = `<div><h2>The Apology</h2><p>A message from me, just for you. Press play.</p></div>`;
+  const fb = el("button", "btn b1", "▶ Watch now"); fb.onclick = openApology; f.append(fb);
+  m.append(f);
+
+  const pr = rowEl("photos", "Our Photos", []); pr.hidden = true; m.append(pr); // fills itself from media/photos/p1.jpg, p2.jpg ...
+  ROWS.forEach(row => m.append(rowEl(row.id, row.title, row.items.map(it => card(it, row.emoji)))));
+
+  // Top 10
+  const tops = TOP10.map((it, i) => { const w = el("div", "topc"); w.append(el("span", "num", i + 1), card(it, "💘")); return w; });
+  m.append(rowEl("top10", "Top 10 Reasons I Love You", tops));
+
+  // My List
+  const ml = rowEl("mylist", "My List", []); ml.id = "mylist"; m.append(ml);
+  renderList();
+  autoPhotos();
+}
+
+/* Auto-load numbered files from the row folders:
+   media/photos/ and media/<row id>/  ->  p1.jpg, p2.jpg ...  (photos)   and   v1.mp4, v2.mp4 ...  (videos)
+   Optional video thumbnail: v1.jpg next to v1.mp4. Each list stops at the first missing number. */
+function autoPhotos() {
+  const add = (folder, ri, emoji, it) => {
+    const st = document.querySelector(`#${folder} .strip`); if (!st) return;
+    it.uid = `${folder}-${it.key}`; it.emoji = emoji; it.date = "Add date"; it.caption = "Add your caption";
+    it.label = ri >= 0 ? `S${ri + 1}:E${st.querySelectorAll(".card").length + 1} – ${it.title}` : it.title;
+    ALL[it.uid] = it; st.append(card(it, emoji)); st.closest(".row").hidden = false;
+  };
+  const probe = (folder, ri, emoji, n) => {
+    const path = `media/${folder}/p${n}.jpg`, im = new Image();
+    im.onload = () => { add(folder, ri, emoji, { key: "p" + n, title: `Photo ${n}`, img: path }); probe(folder, ri, emoji, n + 1); };
+    im.src = path;
+  };
+  const probeVid = (folder, ri, emoji, n) => {
+    const path = `media/${folder}/v${n}.mp4`, v = document.createElement("video");
+    v.preload = "metadata"; v.muted = true;
+    v.onloadedmetadata = () => { add(folder, ri, emoji, { key: "v" + n, title: `Video ${n}`, img: `media/${folder}/v${n}.jpg`, video: path }); probeVid(folder, ri, emoji, n + 1); };
+    v.src = path;
+  };
+  [["photos", -1, "📸"], ...ROWS.map((r, i) => [r.id, i, r.emoji])].forEach(([f, ri, e]) => { probe(f, ri, e, 1); probeVid(f, ri, e, 1); });
+}
+
+function renderList() {
+  const st = $("#mylist .strip"); if (!st) return; st.innerHTML = "";
+  LIST.forEach(id => { const it = ALL[id]; if (it) st.append(card(it, it.emoji)); });
+  if (!LIST.length) st.append(el("p", null, "<span style='color:#a8a8a8'>Tap 🤍 on any card to save it here.</span>"));
+}
+function toggleHeart(id) {
+  LIST = LIST.includes(id) ? LIST.filter(x => x !== id) : [...LIST, id]; saveList();
+  document.querySelectorAll(`[data-heart="${id}"]`).forEach(b => b.textContent = LIST.includes(id) ? "❤️" : "🤍");
+  renderList();
+  if (cur === id) $("#mh").textContent = LIST.includes(id) ? "❤️ In My List" : "🤍 Add to My List";
+}
+
+/* ---------- Modal ---------- */
+let cur = null, slide = null, lastFocus = null;
+function openModal(id, o) {
+  const it = typeof id === "string" ? ALL[id] : id; if (!it) return;
+  if (it.apology) return openApology();
+  cur = it.uid || null; lastFocus = document.activeElement;
+  const mm = $("#mm"); mm.innerHTML = "";
+  if (it.video) { const v = el("video", "media"); v.src = it.video; v.controls = true; v.autoplay = true; v.playsInline = true; if (it.img) v.poster = it.img; mm.append(v); }
+  else { const im = el("img", "media"); im.alt = it.title; im.src = it.img; im.onerror = () => { im.onerror = null; im.src = ph(it.title, it.emoji || "💞"); }; mm.append(im); }
+  $("#mt").textContent = it.label || it.title; $("#md").textContent = it.date || ""; $("#mc").textContent = it.caption || "";
+  $("#mh").style.display = cur ? "" : "none";
+  if (cur) $("#mh").textContent = LIST.includes(cur) ? "❤️ In My List" : "🤍 Add to My List";
+  $("#ov").classList.add("on"); $("#xm").focus();
+}
+function closeModal() {
+  $("#ov").classList.remove("on"); clearInterval(slide); slide = null; cur = null;
+  const v = $("#mm video"); if (v) v.pause();
+  if (!musicOn) $("#aud").pause();
+  if (lastFocus) lastFocus.focus();
+}
+function playSlideshow() {
+  const items = Object.values(ALL).filter(x => x.uid[0] === "r" && !x.apology); let i = 0;
+  const show = () => {
+    const it = items[i++ % items.length]; openModalKeep(it);
+  };
+  const openModalKeep = it => { const keep = lastFocus; openModal(it); lastFocus = keep; $("#mh").style.display = "none"; };
+  show(); slide = setInterval(show, 3200); startMusic();
+}
+
+/* ---------- Music ---------- */
+let musicOn = false;
+function startMusic() { const a = $("#aud"); a.src = CONFIG.music; a.volume = .5; a.play().then(() => { musicOn = true; $("#mus").textContent = "🔊"; }).catch(() => {}); }
+$("#mus").onclick = () => { const a = $("#aud"); if (musicOn) { a.pause(); musicOn = false; $("#mus").textContent = "🔇"; } else startMusic(); };
+
+/* ---------- Apology ---------- */
+let typer = null;
+function openApology() {
+  lastFocus = document.activeElement;
+  const ap = $("#ap"), t = $("#apt"); ap.classList.add("on");
+  t.textContent = ""; $("#fg").style.display = "none"; $("#renew").style.display = "none";
+  $("#aud").pause();
+  const a2 = $("#aud2"); a2.src = CONFIG.apologyMusic; a2.volume = .35; a2.play().catch(() => {});
+  const chars = [...CONFIG.apology]; let i = 0; clearInterval(typer);
+  typer = setInterval(() => {
+    t.textContent += chars[i++];
+    if (i >= chars.length) { clearInterval(typer); $("#fg").style.display = "inline-block"; $("#fg").focus(); }
+  }, 55);
+  $("#xa").focus();
+}
+function closeApology() {
+  clearInterval(typer); $("#ap").classList.remove("on"); $("#aud2").pause();
+  if (musicOn) $("#aud").play().catch(() => {});
+  if (lastFocus) lastFocus.focus();
+}
+$("#fg").onclick = () => { $("#fg").style.display = "none"; $("#renew").style.display = "block"; confetti(); };
+
+/* ---------- Confetti ---------- */
+function confetti() {
+  const cv = $("#conf"), x = cv.getContext("2d"); cv.width = innerWidth; cv.height = innerHeight;
+  if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  const cols = ["#E50914", "#ff6b81", "#fff", "#ffd166", "#f78fb3"];
+  const ps = Array.from({ length: 160 }, () => ({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .5, r: 4 + Math.random() * 6, vy: 2 + Math.random() * 4, vx: -2 + Math.random() * 4, c: cols[Math.random() * cols.length | 0], a: Math.random() * 6 }));
+  let f = 0;
+  (function tick() {
+    x.clearRect(0, 0, cv.width, cv.height);
+    ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += .1; x.fillStyle = p.c; x.save(); x.translate(p.x, p.y); x.rotate(p.a); x.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * .6); x.restore(); });
+    if (++f < 300) requestAnimationFrame(tick); else x.clearRect(0, 0, cv.width, cv.height);
+  })();
+}
+
+/* ---------- Toast ---------- */
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 3200); }
+
+/* ---------- Search ---------- */
+$("#q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".card").forEach(c => { const t = c.closest(".topc") || c; t.classList.toggle("hide", !!q && !c.dataset.s.includes(q)); });
+  document.querySelectorAll("main .row").forEach(r => r.classList.toggle("hide", !!q && !r.querySelector(".card:not(.hide)") && r.id !== "mylist" ? true : (!!q && r.id === "mylist" && !r.querySelector(".card:not(.hide)"))));
+  document.querySelector(".feat").classList.toggle("hide", !!q);
+});
+
+/* ---------- Events ---------- */
+document.addEventListener("click", e => {
+  const h = e.target.closest("[data-heart]"); if (h) { e.stopPropagation(); return toggleHeart(h.dataset.heart); }
+  const c = e.target.closest(".card"); if (c && c.dataset.id) openModal(c.dataset.id);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { if ($("#ap").classList.contains("on")) closeApology(); else if ($("#ov").classList.contains("on")) closeModal(); }
+  if (e.key === "Enter" && e.target.classList.contains("card")) openModal(e.target.dataset.id);
+  if (e.key === "Tab" && $("#ov").classList.contains("on")) { // keep focus inside modal
+    const f = [...$("#ov").querySelectorAll("button,video")]; if (!f.length) return;
+    const a = f[0], z = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+  }
+});
+$("#xm").onclick = closeModal; $("#xa").onclick = closeApology;
+$("#ov").addEventListener("click", e => { if (e.target.id === "ov") closeModal(); });
+$("#mh").onclick = () => cur && toggleHeart(cur);
+$("#play").onclick = playSlideshow;
+$("#more").onclick = () => openModal({ title: CONFIG.heroTitle, date: "Starring " + CONFIG.name, caption: CONFIG.tagline, img: CONFIG.heroImg, emoji: "💞" });
+const logo = $("#logo"); logo.innerHTML = esc(CONFIG.name.toUpperCase()) + "FLIX";
+const secret = () => toast(CONFIG.secretNote);
+logo.onclick = secret; logo.onkeydown = e => { if (e.key === "Enter") secret(); };
+addEventListener("scroll", () => $("#nav").classList.toggle("solid", scrollY > 40), { passive: true });
+
+/* ---------- Init ---------- */
+$("#ht").textContent = CONFIG.heroTitle; $("#htag").textContent = CONFIG.tagline;
+const hi = new Image(); hi.onload = () => { $("#hero").style.backgroundImage = `url(${CONFIG.heroImg})`; }; hi.src = CONFIG.heroImg;
+CONFIG.profiles.forEach(p => {
+  const b = el("button", "prof", `<div class="av" style="background:hsl(${[...p.name].length * 47 % 360},55%,35%)">${p.emoji}</div>${esc(p.name)}`);
+  b.onclick = () => { $("#profiles").classList.add("hide"); toast(p.toast); startMusic(); };
+  $("#plist").append(b);
+});
+build();
+</script>
+</body>
+</html>
